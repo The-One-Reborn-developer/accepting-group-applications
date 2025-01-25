@@ -21,7 +21,7 @@ async def main() -> None:
     dp = Dispatcher()
     logging.info('Dispatcher created.')
 
-    dp.include_routers(start_router)
+    dp.include_router(start_router)
     logging.info('Routes added.')
 
     await bot.delete_webhook(drop_pending_updates=True)
