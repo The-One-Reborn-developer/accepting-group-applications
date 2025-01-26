@@ -1,10 +1,11 @@
-from aiogram import Router
+from aiogram import Router, F
 from aiogram.types import Message
 from aiogram.filters import CommandStart
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
 from bot.database.orm import DatabaseManager, Application
+from bot.telegram_api.requests import send_notification
 
 
 class ApplicationFSM(StatesGroup):
@@ -58,9 +59,15 @@ async def category_handler(message: Message, state: FSMContext):
     application_data = await state.get_data()
     database_result = Application.insert_application(
         ** application_data)
+    send_notification_result = await send_notification(application_data)
 
     if not database_result:
         await message.answer('Произошла ошибка при сохранении заявки.'
+                             '\n\nПопробуйте ещё раз, подав команду /start или нажмите кнопку в меню.')
+        return
+
+    if not send_notification_result:
+        await message.answer('Произошла ошибка при отправке уведомления.'
                              '\n\nПопробуйте ещё раз, подав команду /start или нажмите кнопку в меню.')
         return
 
