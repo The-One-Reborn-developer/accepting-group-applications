@@ -59,14 +59,32 @@ async def category_handler(message: Message, state: FSMContext):
     application_data = await state.get_data()
     database_result = Application.insert_application(
         ** application_data)
+
+    applications_list = Application.get_applications()
+    if not applications_list:
+        await message.answer('Произошла ошибка при сохранении заявки.'
+                             '\n\nПопробуйте ещё раз, подав команду /start или нажмите кнопку в меню.')
+        return
+
+    readable_applications_list = [application.to_dict()
+                                  for application in applications_list]
+    for application in readable_applications_list:
+        if application['link'] == application_data['link']:
+            await state.clear()
+            await message.answer(f'Данная группа/канал уже есть в супергруппе.\n\n'
+                                 'Если хотите добавить ещё группу/канал, то напишите команду /start или нажмите кнопку в меню.')
+            return
+
     send_notification_result = await send_notification(application_data)
 
     if not database_result:
+        await state.clear()
         await message.answer('Произошла ошибка при сохранении заявки.'
                              '\n\nПопробуйте ещё раз, подав команду /start или нажмите кнопку в меню.')
         return
 
     if not send_notification_result:
+        await state.clear()
         await message.answer('Произошла ошибка при отправке уведомления.'
                              '\n\nПопробуйте ещё раз, подав команду /start или нажмите кнопку в меню.')
         return

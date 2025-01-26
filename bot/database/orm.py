@@ -42,6 +42,16 @@ class DatabaseManager(DeclarativeBase, AsyncAttrs):
             logging.error(f"Error in insert_application: {e}")
             return False
 
+    @classmethod
+    def get_applications(cls) -> list | None:
+        try:
+            with cls.sync_session() as session:
+                applications = session.query(cls).all()
+                return applications
+        except Exception as e:
+            logging.error(f"Error in get_applications: {e}")
+            return None
+
 
 class Application(DatabaseManager):
     __tablename__ = 'applications'
@@ -51,3 +61,12 @@ class Application(DatabaseManager):
     link: Mapped[str] = mapped_column(String(255))
     description: Mapped[str] = mapped_column(Text)
     category: Mapped[str] = mapped_column(Text)
+
+    def to_dict(self) -> dict:
+        return {
+            'id': self.id,
+            'username': self.username,
+            'link': self.link,
+            'description': self.description,
+            'category': self.category
+        }
