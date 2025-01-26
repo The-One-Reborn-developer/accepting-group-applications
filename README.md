@@ -13,6 +13,8 @@ A [TG bot](https://t.me/it_chats_bot) for receiving and processing applications 
 * [aiogram](https://github.com/aiogram/aiogram)
 * [python-dotenv](https://github.com/theskumar/python-dotenv)
 * [SQLAlchemy](https://www.sqlalchemy.org/)
+* [Docker](https://www.docker.com/)
+* [docker-compose](https://docs.docker.com/compose/)
 
 ## Setup
 
@@ -21,5 +23,5 @@ Create `.env` file and populate it with environment variables according to `.env
 ## Running
 
 ```bash
-python3 -m bot.main
+bash launch.sh
 ```

@@ -1,0 +1,8 @@
+services:
+  bot:
+    build:
+      context: ..
+      dockerfile: dockerfiles/Dockerfile.bot
+    restart: always
+    volumes:
+      - ./bot/database/applications.db:/app/bot/database/applications.db
