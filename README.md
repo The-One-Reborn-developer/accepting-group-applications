@@ -5,7 +5,7 @@ A [TG bot](https://t.me/it_chats_bot) for receiving and processing applications 
 ## Features
 
 * Handle user's username, group link, description and category and store them to a database.
-* Send a notification to the admin group about new applications. *in progress*
+* Send a notification to the admin group about new applications.
 * Send notifications to users about the status of their applications. *in progress*
 
 ## Dependencies
