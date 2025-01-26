@@ -7,6 +7,8 @@ from aiogram import Bot, Dispatcher
 
 from bot.routes.start import start_router
 
+from bot.scripts.spreadsheet import initialize_spreadsheet
+
 
 async def main() -> None:
     load_dotenv(find_dotenv())
@@ -23,7 +25,7 @@ async def main() -> None:
 
     dp.include_router(start_router)
     logging.info('Routes added.')
-
+    initialize_spreadsheet()
     await bot.delete_webhook(drop_pending_updates=True)
     logging.info('Webhook deleted.')
     logging.info('Starting polling...')
