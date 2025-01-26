@@ -57,16 +57,10 @@ class Application(DatabaseManager):
     __tablename__ = 'applications'
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    username: Mapped[str] = mapped_column(String(255))
     link: Mapped[str] = mapped_column(String(255))
-    description: Mapped[str] = mapped_column(Text)
-    category: Mapped[str] = mapped_column(Text)
 
     def to_dict(self) -> dict:
         return {
             'id': self.id,
-            'username': self.username,
-            'link': self.link,
-            'description': self.description,
-            'category': self.category
+            'link': self.link
         }

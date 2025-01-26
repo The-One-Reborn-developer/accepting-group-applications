@@ -57,8 +57,7 @@ async def category_handler(message: Message, state: FSMContext):
     await state.update_data(category=message.text)
 
     application_data = await state.get_data()
-    database_result = Application.insert_application(
-        ** application_data)
+    database_result = Application.insert_application(application_data['link'])
 
     applications_list = Application.get_applications()
     if not applications_list:
