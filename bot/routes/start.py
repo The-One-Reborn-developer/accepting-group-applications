@@ -27,7 +27,7 @@ async def start_handler(message: Message, state: FSMContext):
         username=f'https://t.me/{message.from_user.username}')
     await state.set_state(ApplicationFSM.link)
 
-    await message.answer('Пришлите ссылку на группу, которую хотите добавить в список.')
+    await message.answer('Пришлите ссылку на группу/канал, которую хотите добавить в список.')
 
 
 @start_router.message(ApplicationFSM.link)
@@ -40,15 +40,15 @@ async def link_handler(message: Message, state: FSMContext):
 
     await state.update_data(link=message.text)
     await state.set_state(ApplicationFSM.description)
-    await message.answer('Напишите вкратце описание группы.')
+    await message.answer('Напишите вкратце описание группы/канала.')
 
 
 @start_router.message(ApplicationFSM.description)
 async def description_handler(message: Message, state: FSMContext):
     await state.update_data(description=message.text)
     await state.set_state(ApplicationFSM.category)
-    await message.answer('В какую из существующих категорий в списке Вы хотели бы, чтобы мы добавили группу?'
-                         '\n\nЕсли такой категории не существует, можете написать её здесь и обосновать.')
+    await message.answer('В какую из существующих категорий в списке Вы хотели бы, чтобы мы добавили группу/канал?'
+                         '\n\nЕсли такой категории не существует, можете написать её здесь и обосновать создание новой категории.')
 
 
 @start_router.message(ApplicationFSM.category)
@@ -65,6 +65,6 @@ async def category_handler(message: Message, state: FSMContext):
         return
 
     await state.clear()
-    await message.answer('Ваша заявка принята, ожидайте уведомления от бота о добавлении группы или отклонении заявки.'
+    await message.answer('Ваша заявка принята, ожидайте уведомления от бота о добавлении группы/канала или отклонении заявки.'
                          '\n\nТакже Вам могут написать администраторы для уточнения информации.'
-                         '\n\nЕсли хотите добавить ещё группу, то напишите команду /start или нажмите кнопку в меню.')
+                         '\n\nЕсли хотите добавить ещё группу/канал, то напишите команду /start или нажмите кнопку в меню.')
