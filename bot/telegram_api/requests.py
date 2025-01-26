@@ -11,7 +11,9 @@ async def send_notification(application_data) -> bool:
         async with aiohttp.ClientSession() as session:
             username = application_data['username'].replace(
                 'https://t.me/', '@')
-            link = application_data['link']
+            link = application_data['link'].replace(
+                'https://t.me/', '@'
+            )
             description = application_data['description']
             category = application_data['category']
             logging.info(f"{username}, {link}, {description}, {category}")
@@ -19,10 +21,11 @@ async def send_notification(application_data) -> bool:
                 BASE_URL,
                 data={
                     'chat_id': os.getenv('ADMIN_GROUP_CHAT_ID'),
-                    'text': f'Новая заявка от {username}:\n\n'
-                    f'Ссылка: {link}\n\n'
-                    f'Описание: {description}\n\n'
-                    f'Категория: {category}'
+                    'text': f'Новая заявка от {username}:\n'
+                    f'Ссылка: {link}\n'
+                    f'<pre>Описание: {description}</pre>\n'
+                    f'Категория: {category}',
+                    'parse_mode': 'HTML'
                 }
             )
 
