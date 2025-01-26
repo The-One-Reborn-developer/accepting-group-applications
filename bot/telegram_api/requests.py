@@ -21,7 +21,7 @@ async def send_notification(application_data) -> bool:
                 BASE_URL,
                 data={
                     'chat_id': os.getenv('ADMIN_GROUP_CHAT_ID'),
-                    'text': f'Новая заявка от {username}:\n'
+                    'text': f'{username}:\n'
                     f'Ссылка: {link}\n'
                     f'Описание: <code>{description}</code>\n'
                     f'Категория: {category}',
