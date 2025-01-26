@@ -3,7 +3,7 @@ import os
 
 from dotenv import load_dotenv, find_dotenv
 
-from sqlalchemy import String, Text, create_engine
+from sqlalchemy import String, create_engine
 from sqlalchemy.orm import Mapped, mapped_column, sessionmaker, DeclarativeBase
 from sqlalchemy.ext.asyncio import AsyncAttrs
 
@@ -32,9 +32,10 @@ class DatabaseManager(DeclarativeBase, AsyncAttrs):
 
     @classmethod
     def insert_application(cls, **kwargs) -> bool | None:
+        link = kwargs['link']
         try:
             with cls.sync_session() as session:
-                instance = cls(**kwargs)
+                instance = cls(link=link)
                 session.add(instance)
                 session.commit()
                 return True
