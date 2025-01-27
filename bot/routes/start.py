@@ -4,7 +4,7 @@ from aiogram.filters import CommandStart
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
-from bot.database.orm import DatabaseManager, Application
+from bot.database.orm import Application
 from bot.telegram_api.requests import send_notification
 
 
@@ -15,8 +15,6 @@ class ApplicationFSM(StatesGroup):
     category = State()
 
 
-DATABASE = DatabaseManager()
-DATABASE.create_tables()
 start_router = Router()
 
 

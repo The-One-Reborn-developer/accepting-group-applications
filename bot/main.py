@@ -6,8 +6,11 @@ from dotenv import load_dotenv, find_dotenv
 from aiogram import Bot, Dispatcher
 
 from bot.routes.start import start_router
-
-from bot.scripts.spreadsheet import initialize_spreadsheet
+from bot.database.orm import Application, DatabaseManager
+from bot.scripts.spreadsheet import (
+    initialize_spreadsheet,
+    scrape_links
+)
 
 
 async def main() -> None:
@@ -17,6 +20,31 @@ async def main() -> None:
         level=logging.INFO,
         format='%(asctime)s - %(levelname)s - %(name)s - %(message)s',
     )
+    logging.info('Initializing database...')
+    DATABASE = DatabaseManager()
+    logging.info('Creating tables...')
+    DATABASE.create_tables()
+    logging.info('Tables created.')
+
+    logging.info('Initializing spreadsheet...')
+    worksheet = initialize_spreadsheet()
+    logging.info('Spreadsheet initialized.')
+
+    logging.info('Scraping spreadsheet for links...')
+    links = scrape_links(worksheet)
+    logging.info('Spreadsheet links scraped.')
+
+    logging.info('Getting links from database...')
+    links_in_database = Application.get_applications()
+    readable_links_list = [link.to_dict() for link in links_in_database]
+
+    database_links = [link_data['link']
+                      for link_data in readable_links_list]
+    logging.info('Populating database with the links from spreadsheet...')
+    for link in links:
+        if link not in database_links and link != '' and link != 'Ссылка':
+            logging.info(f'Adding {link} to database...')
+            Application.insert_application(link=link)
 
     logging.info('Starting bot.')
     bot = Bot(token=os.getenv('TELEGRAM_BOT_TOKEN'))
@@ -25,7 +53,7 @@ async def main() -> None:
 
     dp.include_router(start_router)
     logging.info('Routes added.')
-    initialize_spreadsheet()
+
     await bot.delete_webhook(drop_pending_updates=True)
     logging.info('Webhook deleted.')
     logging.info('Starting polling...')

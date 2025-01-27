@@ -1,6 +1,5 @@
 import os
 import gspread
-import logging
 
 from google.oauth2.service_account import Credentials
 
@@ -21,3 +20,7 @@ def initialize_spreadsheet() -> gspread.Worksheet:
     worksheet = spreadsheet.sheet1
 
     return worksheet
+
+
+def scrape_links(worksheet: gspread.Worksheet) -> list[str]:
+    return worksheet.col_values(4)
