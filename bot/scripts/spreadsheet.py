@@ -4,7 +4,7 @@ import gspread
 from google.oauth2.service_account import Credentials
 
 
-def initialize_spreadsheet() -> gspread.Worksheet:
+def initialize_spreadsheet() -> gspread.Spreadsheet:
     scopes = [
         "https://www.googleapis.com/auth/spreadsheets",
     ]
@@ -17,10 +17,16 @@ def initialize_spreadsheet() -> gspread.Worksheet:
     spreadsheet_id = os.getenv("SPREADSHEET_ID")
     spreadsheet = client.open_by_key(spreadsheet_id)
 
-    worksheet = spreadsheet.sheet1
-
-    return worksheet
+    return spreadsheet
 
 
-def scrape_links(worksheet: gspread.Worksheet) -> list[str]:
-    return worksheet.col_values(4)
+def scrape_ru_group_links(spreadsheet: gspread.Spreadsheet) -> list[str]:
+    ru_groups_worksheet = spreadsheet.get_worksheet(0)
+
+    return ru_groups_worksheet.col_values(4)
+
+
+def scrape_en_group_links(spreadsheet: gspread.Spreadsheet) -> list[str]:
+    en_groups_worksheet = spreadsheet.get_worksheet(1)
+
+    return en_groups_worksheet.col_values(4)

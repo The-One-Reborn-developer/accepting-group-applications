@@ -9,7 +9,8 @@ from bot.routes.start import start_router
 from bot.database.orm import Application, DatabaseManager
 from bot.scripts.spreadsheet import (
     initialize_spreadsheet,
-    scrape_links
+    scrape_ru_group_links,
+    scrape_en_group_links
 )
 
 
@@ -27,11 +28,13 @@ async def main() -> None:
     logging.info('Tables created.')
 
     logging.info('Initializing spreadsheet...')
-    worksheet = initialize_spreadsheet()
+    spreadsheet = initialize_spreadsheet()
     logging.info('Spreadsheet initialized.')
 
-    logging.info('Scraping spreadsheet for links...')
-    links = scrape_links(worksheet)
+    logging.info('Scraping russian groups worksheet...')
+    ru_groups_links = scrape_ru_group_links(spreadsheet)
+    logging.info('Scraping english groups worksheet...')
+    en_groups_links = scrape_en_group_links(spreadsheet)
     logging.info('Spreadsheet links scraped.')
 
     logging.info('Getting links from database...')
@@ -41,10 +44,15 @@ async def main() -> None:
     database_links = [link_data['link']
                       for link_data in readable_links_list]
     logging.info('Populating database with the links from spreadsheet...')
-    for link in links:
+    for link in ru_groups_links:
         if link not in database_links and link != '' and link != 'Ссылка':
             logging.info(f'Adding {link} to database...')
             Application.insert_application(link=link)
+    for link in en_groups_links:
+        if link not in database_links and link != '' and link != 'Ссылка':
+            logging.info(f'Adding {link} to database...')
+            Application.insert_application(link=link)
+    logging.info('Database populated.')
 
     logging.info('Starting bot.')
     bot = Bot(token=os.getenv('TELEGRAM_BOT_TOKEN'))
