@@ -10,7 +10,8 @@ from bot.database.orm import Application, DatabaseManager
 from bot.scripts.spreadsheet import (
     initialize_spreadsheet,
     scrape_ru_group_links,
-    scrape_en_group_links
+    scrape_en_group_links,
+    scrape_channels_links
 )
 
 
@@ -35,6 +36,8 @@ async def main() -> None:
     ru_groups_links = scrape_ru_group_links(spreadsheet)
     logging.info('Scraping english groups worksheet...')
     en_groups_links = scrape_en_group_links(spreadsheet)
+    logging.info('Scraping channels worksheet...')
+    channels_links = scrape_channels_links(spreadsheet)
     logging.info('Spreadsheet links scraped.')
 
     logging.info('Getting links from database...')

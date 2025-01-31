@@ -30,3 +30,9 @@ def scrape_en_group_links(spreadsheet: gspread.Spreadsheet) -> list[str]:
     en_groups_worksheet = spreadsheet.get_worksheet(1)
 
     return en_groups_worksheet.col_values(4)
+
+
+def scrape_channels_links(spreadsheet: gspread.Spreadsheet) -> list[str]:
+    channels_worksheet = spreadsheet.get_worksheet(2)
+
+    return channels_worksheet.col_values(4)
