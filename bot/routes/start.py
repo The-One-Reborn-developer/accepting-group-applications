@@ -1,5 +1,7 @@
+import os
+
 from aiogram import Router, F
-from aiogram.types import Message
+from aiogram.types import Message, CallbackQuery
 from aiogram.filters import CommandStart
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
@@ -95,3 +97,13 @@ async def category_handler(message: Message, state: FSMContext):
     await message.answer('Ваша заявка принята, ожидайте уведомления от бота о добавлении группы/канала или отклонении заявки.'
                          '\n\nТакже Вам могут написать администраторы для уточнения информации.'
                          '\n\nЕсли хотите добавить ещё группу/канал, то напишите команду /start или нажмите кнопку в меню.')
+
+
+@start_router.callback_query(F.data == 'approve')
+async def approve_application(callback: CallbackQuery):
+    await callback.message.edit_text(text='Заявка одобрена. Группа/канал добавлен/а в соответствующий раздел.')
+
+
+@start_router.callback_query(F.data == 'decline')
+async def decline_application(callback: CallbackQuery):
+    await callback.message.edit_text(text='Заявка отклонена.')

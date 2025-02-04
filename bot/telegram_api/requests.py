@@ -1,6 +1,7 @@
 import logging
 import aiohttp
 import os
+import json
 
 
 async def send_notification(application_data) -> bool:
@@ -16,6 +17,12 @@ async def send_notification(application_data) -> bool:
             )
             description = application_data['description']
             category = application_data['category']
+            keyboard = {
+                "inline_keyboard": [
+                    [{"text": "Одобрить ✅", "callback_data": "approve"}],
+                    [{"text": "Отклонить ❌", "callback_data": "decline"}]
+                ]
+            }
             logging.info(f"{username}, {link}, {description}, {category}")
             await session.post(
                 BASE_URL,
@@ -25,7 +32,8 @@ async def send_notification(application_data) -> bool:
                     f'Ссылка: {link}\n'
                     f'Описание: <code>{description}</code>\n'
                     f'Категория: {category}',
-                    'parse_mode': 'HTML'
+                    'parse_mode': 'HTML',
+                    'reply_markup': json.dumps(keyboard)
                 }
             )
 

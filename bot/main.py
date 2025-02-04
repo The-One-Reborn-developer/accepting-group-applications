@@ -55,6 +55,10 @@ async def main() -> None:
         if link not in database_links and link != '' and link != 'Ссылка':
             logging.info(f'Adding {link} to database...')
             Application.insert_application(link=link)
+    for link in channels_links:
+        if link not in database_links and link != '' and link != 'Ссылка':
+            logging.info(f'Adding {link} to database...')
+            Application.insert_application(link=link)
     logging.info('Database populated.')
 
     logging.info('Starting bot.')
